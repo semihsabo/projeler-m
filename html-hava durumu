@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hava durumu projesi</title>
+  <link rel="stylesheet" href="style.css">
+  </style>"
+</head>
+<body>
+<section>
+  <div class="top-banner">
+<div class="container">
+
+<h1 class="heading">hava durumu projesi</h1>
+<form> 
+ <input type="text" placeholder="şehir ismi girin" autofocus>
+ <button type="submit">gönder</button> 
+ <span class="msg"hata></span>
+</form>
+</div>
+</section>
+  <section class="ajax-section">
+<div class="container"></div>
+<ul class="cities">
+</ul>
+  </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
