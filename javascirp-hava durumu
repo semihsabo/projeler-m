@@ -1,0 +1,70 @@
+const form = document.querySelector(".top-banner form");
+const input = document.querySelector(".top-banner input");
+const msg = document.querySelector(".top-banner .msg");
+const list = document.querySelector(".ajax-section .cities");
+const apiKey = "d0d98c8a778c301eb111ecbcaf3ecb68";
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const inputVal = input.value.trim();
+
+  const listItems = list.querySelectorAll(".city");
+  const listItemsArray = Array.from(listItems);
+
+  if (listItemsArray.length > 0) {
+    const filteredArray = listItemsArray.filter((el) => {
+      const content = el
+        .querySelector(".city-name span")
+        .textContent
+        .toLowerCase();
+
+      return content === inputVal.toLowerCase();
+    });
+
+    if (filteredArray.length > 0) {
+      msg.textContent = `Zaten ${inputVal} şehri listede var.`;
+      form.reset();
+      input.focus();
+      return;
+    }
+  }
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric&lang=tr`;
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Şehir bulunamadı");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const { name, sys, main, weather } = data;
+
+      const iconUrl = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
+
+      const cityCard = document.createElement("li");
+      cityCard.classList.add("city");
+
+      cityCard.innerHTML = `
+        <h2 class="city-name">
+          <span>${name}</span>
+          <sup>${sys.country}</sup>
+        </h2>
+        <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+        <figure>
+          <img class="city-icon" src="${iconUrl}" alt="${weather[0].description}">
+          <figcaption>${weather[0].description}</figcaption>
+        </figure>
+      `;
+
+      list.appendChild(cityCard);
+      msg.textContent = "";
+      form.reset();
+      input.focus();
+    })
+    .catch(() => {
+      msg.textContent = "Lütfen geçerli bir şehir adı girin.";
+    });
+});
